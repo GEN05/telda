@@ -3,8 +3,6 @@ package com.test.telda.domain;
 import lombok.*;
 
 @Data
-@NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Region {
