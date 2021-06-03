@@ -3,8 +3,6 @@ package com.test.telda.service;
 import com.test.telda.domain.Region;
 import com.test.telda.exception.RegionException;
 import com.test.telda.repository.RegionRepository;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;

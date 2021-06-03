@@ -38,4 +38,8 @@ public class RegionController {
         service.add(region);
     }
 
+    @GetMapping("../error")
+    public String error() {
+        return "An error has occurred. Check the entered data";
+    }
 }
