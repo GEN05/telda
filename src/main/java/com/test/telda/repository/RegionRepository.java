@@ -28,9 +28,9 @@ public interface RegionRepository {
     @Delete("DELETE FROM region WHERE id = #{id}")
     boolean deleteById(long id);
 
-    @Delete("TRUNCATE region")
-    int deleteAll();
+    @Delete("DELETE FROM region WHERE TRUE")
+    boolean deleteAll();
 
-    @Update("UPDATE region SET (id = #{id}, name = #{name}, abbreviatedName = #{abbreviatedName})")
-    boolean update(Region region);
+    @Update("update region set region.id = #{reg.id}, region.name = #{reg.name}, region.abbreviatedName = #{reg.abbreviatedName} where region.id = #{regId}")
+    boolean update(Region reg, long regId);
 }

@@ -4,7 +4,6 @@ import com.test.telda.domain.Region;
 import com.test.telda.exception.RegionException;
 import com.test.telda.repository.RegionRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +15,7 @@ import java.util.List;
 public class RegionService {
     private final RegionRepository repository;
 
-    @SneakyThrows
-    public Region find(Region region) {
+    public Region find(Region region) throws RegionException {
         Region answer = repository.find(region);
         if (answer == null) {
             throw new RegionException("No such region");
@@ -25,8 +23,7 @@ public class RegionService {
         return answer;
     }
 
-    @SneakyThrows(RegionException.class)
-    public Region findById(long id) {
+    public Region findById(long id) throws RegionException {
         Region region = repository.findById(id);
         if (region == null) {
             throw new RegionException("No regions with this id");
@@ -34,8 +31,7 @@ public class RegionService {
         return region;
     }
 
-    @SneakyThrows(RegionException.class)
-    public Region findByName(String name) {
+    public Region findByName(String name) throws RegionException {
         Region region = repository.findByName(name);
         if (region == null) {
             throw new RegionException("No regions with this name");
@@ -43,8 +39,7 @@ public class RegionService {
         return region;
     }
 
-    @SneakyThrows(RegionException.class)
-    public Region findByAbbreviatedName(String abbreviatedName) {
+    public Region findByAbbreviatedName(String abbreviatedName) throws RegionException {
         Region region = repository.findByAbbreviatedName(abbreviatedName);
         if (region == null) {
             throw new RegionException("No regions with this abbreviated name");
@@ -52,17 +47,15 @@ public class RegionService {
         return region;
     }
 
-    @SneakyThrows(RegionException.class)
-    public List<Region> findAll() {
+    public List<Region> findAll() throws RegionException {
         List<Region> region = repository.findAll();
-        if (region == null) {
+        if (region == null || region.isEmpty()) {
             throw new RegionException("No regions");
         }
         return region;
     }
 
-    @SneakyThrows(RegionException.class)
-    public void add(Region newRegion) {
+    public void add(Region newRegion) throws RegionException {
         var region = Region.builder()
                 .id(newRegion.id)
                 .name(newRegion.getName())
@@ -73,29 +66,26 @@ public class RegionService {
         }
     }
 
-    @SneakyThrows(RegionException.class)
-    public void deleteById(long id) {
+    public void deleteById(long id) throws RegionException {
         if (repository.findById(id) == null) {
             throw new RegionException("There is no such region");
         }
-        if (repository.deleteById(id)) {
+        if (!repository.deleteById(id)) {
             throw new RegionException("Failed to delete region");
         }
     }
 
-    @SneakyThrows(RegionException.class)
-    public void deleteAll() {
-        if (repository.deleteAll() == 0) {
+    public void deleteAll() throws RegionException {
+        if (!repository.deleteAll()) {
             throw new RegionException("Failed to delete all region");
         }
     }
 
-    @SneakyThrows(RegionException.class)
-    public void update(Region region) {
-        if (repository.find(region) == null) {
+    public void update(Region region, long regId) throws RegionException {
+        if (repository.findById(regId) == null) {
             throw new RegionException("There is no such region");
         }
-        if (repository.update(region)) {
+        if (!repository.update(region, regId)) {
             throw new RegionException("Failed to update data");
         }
     }

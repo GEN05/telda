@@ -1,11 +1,10 @@
 package com.test.telda.controller;
 
 import com.test.telda.domain.Region;
+import com.test.telda.exception.RegionException;
 import com.test.telda.service.RegionService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -15,31 +14,77 @@ public class RegionController {
 
     @GetMapping("/id/{id}")
     public String findById(@PathVariable long id) {
-        return service.findById(id).toString();
+        try {
+            return service.findById(id).toString();
+        } catch (RegionException e) {
+            return e.getMessage();
+        }
     }
 
     @GetMapping("/name/{name}")
-    public Region findByName(@PathVariable String name) {
-        return service.findByName(name);
+    public String findByName(@PathVariable String name) {
+        try {
+            return service.findByName(name).toString();
+        } catch (RegionException e) {
+            return e.getMessage();
+        }
     }
 
     @GetMapping("/abbreviatedName/{abbreviatedName}")
     public String findByAbbreviatedName(@PathVariable String abbreviatedName) {
-        return service.findByAbbreviatedName(abbreviatedName).toString();
+        try {
+            return service.findByAbbreviatedName(abbreviatedName).toString();
+        } catch (RegionException e) {
+            return e.getMessage();
+        }
     }
 
     @GetMapping("/all")
-    public List<Region> findAll() {
-        return service.findAll();
+    public String findAll() {
+        try {
+            return service.findAll().toString();
+        } catch (RegionException e) {
+            return e.getMessage();
+        }
     }
 
     @PostMapping("/add")
-    private void create(Region region) {
-        service.add(region);
+    private String create(Region region) {
+        try {
+            service.add(region);
+        } catch (RegionException e) {
+            return e.getMessage();
+        }
+        return findAll();
     }
 
-    @GetMapping("../error")
-    public String error() {
-        return "An error has occurred. Check the entered data";
+    @DeleteMapping("/delete")
+    public String deleteById(int id) {
+        try {
+            service.deleteById(id);
+        } catch (RegionException e) {
+            return e.getMessage();
+        }
+        return findAll();
+    }
+
+    @DeleteMapping("/delete/all")
+    public String deleteAll() {
+        try {
+            service.deleteAll();
+        } catch (RegionException e) {
+            return e.getMessage();
+        }
+        return findAll();
+    }
+
+    @PostMapping("/update")
+    public String update(Region region, long regId) {
+        try {
+            service.update(region, regId);
+        } catch (RegionException e) {
+            return e.getMessage();
+        }
+        return findAll();
     }
 }
