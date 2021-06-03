@@ -49,7 +49,7 @@ public class RegionController {
     }
 
     @PostMapping("/add")
-    private String create(Region region) {
+    private String add(Region region) {
         try {
             service.add(region);
         } catch (RegionException e) {

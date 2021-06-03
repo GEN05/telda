@@ -44,7 +44,6 @@ public class RegionService {
         return region;
     }
 
-    @Cacheable(value = "region")
     public List<Region> findAll() throws RegionException {
         List<Region> region = repository.findAll();
         if (region == null || region.isEmpty()) {
@@ -55,7 +54,7 @@ public class RegionService {
 
     @CacheEvict(value = "region")
     public void add(Region newRegion) throws RegionException {
-        var region = Region.builder()
+        Region region = Region.builder()
                 .id(newRegion.id)
                 .name(newRegion.getName())
                 .abbreviatedName(newRegion.getAbbreviatedName())
