@@ -4,6 +4,8 @@ import com.test.telda.domain.Region;
 import com.test.telda.exception.RegionException;
 import com.test.telda.repository.RegionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,14 +17,7 @@ import java.util.List;
 public class RegionService {
     private final RegionRepository repository;
 
-    public Region find(Region region) throws RegionException {
-        Region answer = repository.find(region);
-        if (answer == null) {
-            throw new RegionException("No such region");
-        }
-        return answer;
-    }
-
+    @Cacheable(value = "region")
     public Region findById(long id) throws RegionException {
         Region region = repository.findById(id);
         if (region == null) {
@@ -31,6 +26,7 @@ public class RegionService {
         return region;
     }
 
+    @Cacheable(value = "region")
     public Region findByName(String name) throws RegionException {
         Region region = repository.findByName(name);
         if (region == null) {
@@ -39,6 +35,7 @@ public class RegionService {
         return region;
     }
 
+    @Cacheable(value = "region")
     public Region findByAbbreviatedName(String abbreviatedName) throws RegionException {
         Region region = repository.findByAbbreviatedName(abbreviatedName);
         if (region == null) {
@@ -47,6 +44,7 @@ public class RegionService {
         return region;
     }
 
+    @Cacheable(value = "region")
     public List<Region> findAll() throws RegionException {
         List<Region> region = repository.findAll();
         if (region == null || region.isEmpty()) {
@@ -55,6 +53,7 @@ public class RegionService {
         return region;
     }
 
+    @CacheEvict(value = "region")
     public void add(Region newRegion) throws RegionException {
         var region = Region.builder()
                 .id(newRegion.id)
@@ -66,6 +65,7 @@ public class RegionService {
         }
     }
 
+    @CacheEvict(value = "region")
     public void deleteById(long id) throws RegionException {
         if (repository.findById(id) == null) {
             throw new RegionException("There is no such region");
@@ -75,12 +75,14 @@ public class RegionService {
         }
     }
 
+    @CacheEvict(value = "region", allEntries = true)
     public void deleteAll() throws RegionException {
         if (!repository.deleteAll()) {
             throw new RegionException("Failed to delete all region");
         }
     }
 
+    @CacheEvict(value = "region")
     public void update(Region region, long regId) throws RegionException {
         if (repository.findById(regId) == null) {
             throw new RegionException("There is no such region");
